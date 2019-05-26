@@ -9,6 +9,8 @@
       backgroundColor: this.color
     }"
   >
+    {{ this.amount }}
+    {{ this.currentMax }}
     {{ this.formatTime() }}
   </div>
 </template>
