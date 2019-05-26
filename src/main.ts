@@ -9,6 +9,10 @@ Vue.prototype.setMax = function(newMax: number) {
     this.$root.$emit("newMax", newMax);
   }
 };
+Vue.prototype.resetMax = function() {
+  this.$max = 0;
+  this.$root.$emit("newMax", 0);
+};
 Vue.prototype.getMax = function() {
   return this.$max;
 };

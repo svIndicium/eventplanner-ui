@@ -5,6 +5,8 @@
       <Quarter
         :key="index"
         :time="getTime(index)"
+        :currentMax="currentMax"
+        :newMax="newMax"
         v-for="index in 96"
       ></Quarter>
     </div>
@@ -20,7 +22,8 @@ export default {
   name: "Day",
   data() {
     return {
-      data: []
+      data: [],
+      currentMax: 0
     };
   },
   components: { Quarter, Header },
@@ -83,11 +86,25 @@ export default {
         this.$emit("addEvent", lesson);
       }
     },
+    newMax(max) {
+      if (max > this.currentMax) {
+        this.currentMax = max;
+        this.$root.$emit("newMax", max);
+      }
+    },
+    addListeners() {
+      this.$root.$on("newMax", newMax => {
+        if (newMax > this.currentMax) {
+          this.currentMax = newMax;
+        }
+      });
+    },
     getTime(index) {
       return new Date(this.date.getTime() + (index - 1) * 900000);
     },
     getEvents() {
       this.$emit("clear");
+      this.currentMax = 0;
       axios
         .get(
           this.url +
@@ -108,6 +125,7 @@ export default {
     }
   },
   mounted() {
+    this.addListeners();
     this.getEvents();
   }
 };
