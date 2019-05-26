@@ -26,6 +26,7 @@ export default {
   methods: {
     updatedFilters(filters) {
       this.endpointAttributes = filters;
+      this.resetMax();
     }
   },
   data() {

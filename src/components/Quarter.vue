@@ -9,6 +9,8 @@
       backgroundColor: this.color
     }"
   >
+    {{ this.amount }}
+    {{ this.currentMax }}
     {{ this.formatTime() }}
   </div>
 </template>
@@ -17,13 +19,14 @@
 export default {
   name: "Quarter",
   props: {
-    time: Date
+    time: Date,
+    currentMax: Number,
+    newMax: Function
   },
   data() {
     return {
       amount: 0,
-      color: "hsl(0, 100%, " + this.getPercentage(0) + "%)",
-      currentMax: 0
+      color: "hsl(0, 100%, " + this.getPercentage(10) + "%)"
     };
   },
   methods: {
@@ -31,20 +34,14 @@ export default {
       return this.time.getHours() + ":00";
     },
     getPercentage(max) {
-      if (this.amount === 0 || max === 0) {
+      if (max === 0) {
         return 100;
       }
       return 100 - (this.amount / max) * 50;
     },
-    setNewMax(val) {
-      this.currentMax = val;
-    },
     addListener() {
       this.$parent.$on("addEvent", event => {
         this.addEvent(event);
-      });
-      this.$root.$on("newMax", max => {
-        this.setNewMax(max);
       });
       this.$parent.$on("clear", () => {
         this.amount = 0;
@@ -56,13 +53,16 @@ export default {
         this.time.getTime() < event["endDate"].getTime()
       ) {
         this.amount += 1;
-        this.setMax(this.amount);
+        this.newMax(this.amount);
       }
     }
   },
   watch: {
     currentMax: function(val) {
       this.color = "hsl(0, 100%, " + this.getPercentage(val) + "%)";
+    },
+    amount: function() {
+      this.color = "hsl(0, 100%, " + this.getPercentage(this.currentMax) + "%)";
     }
   },
   created() {
