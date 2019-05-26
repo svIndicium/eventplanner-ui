@@ -24,7 +24,12 @@ export default {
     };
   },
   components: { Quarter, Header },
-  props: { date: Date },
+  props: { date: Date, url: String },
+  watch: {
+    url: function(newUrl, oldUrl) {
+      this.getEvents();
+    }
+  },
   methods: {
     getDayName(weekDay) {
       let weekDays = [
@@ -80,48 +85,35 @@ export default {
     },
     getTime(index) {
       return new Date(this.date.getTime() + (index - 1) * 900000);
+    },
+    getEvents() {
+      this.$emit("clear");
+      axios
+        .get(
+          this.url +
+            "&year=" +
+            this.date.getFullYear() +
+            "&month=" +
+            (this.date.getMonth() + 1) +
+            "&day=" +
+            this.date.getDate()
+        )
+        .then(res => {
+          for (let lesson of res.data) {
+            lesson["startDate"] = this.parseDate(lesson["startDate"]);
+            lesson["endDate"] = this.parseDate(lesson["endDate"]);
+          }
+          this.addEvents(res.data);
+        });
     }
   },
   mounted() {
-    axios
-      .get(
-        "http://localhost:8080/events?year=" +
-          this.date.getFullYear() +
-          "&month=" +
-          (this.date.getMonth() + 1) +
-          "&day=" +
-          this.date.getDate()
-      )
-      .then(res => {
-        for (let lesson of res.data) {
-          lesson["startDate"] = this.parseDate(lesson["startDate"]);
-          lesson["endDate"] = this.parseDate(lesson["endDate"]);
-        }
-        this.addEvents(res.data);
-      });
+    this.getEvents();
   }
 };
 </script>
 
 <style lang="scss">
 @import "variables";
-
-.container {
-  width: floor(86vw / 7);
-  margin: 1vw;
-  display: inline-block;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  @media only screen and (max-width: 600px) {
-    width: 90vw;
-    margin: 5vw;
-  }
-}
-
-.schedule {
-  height: 300px;
-  overflow-y: scroll;
-}
+@import "cards";
 </style>

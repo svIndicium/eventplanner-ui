@@ -46,6 +46,9 @@ export default {
       this.$root.$on("newMax", max => {
         this.setNewMax(max);
       });
+      this.$parent.$on("clear", () => {
+        this.amount = 0;
+      });
     },
     addEvent(event) {
       if (

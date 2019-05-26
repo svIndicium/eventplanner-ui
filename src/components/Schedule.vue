@@ -1,24 +1,38 @@
 <template>
   <div>
     <div>
-      <Day :date="date" v-bind:key="date.getDay()" v-for="date in dates"></Day>
+      <Day
+        :date="date"
+        v-bind:key="date.getDay()"
+        v-for="date in dates"
+        :url="baseUrl + endpointAttributes"
+      ></Day>
+      <FilterSettings :onNewEndpoint="updatedFilters"></FilterSettings>
     </div>
-    <div>{{ schedules }}</div>
   </div>
 </template>
 
 <script>
 import Day from "./Day";
+import FilterSettings from "./FilterSettings";
 import axios from "axios";
 
 export default {
   name: "Schedule",
   components: {
-    Day
+    Day,
+    FilterSettings
+  },
+  methods: {
+    updatedFilters(filters) {
+      this.endpointAttributes = filters;
+    }
   },
   data() {
     return {
-      schedules: [],
+      types: [],
+      baseUrl: "http://localhost:8080/events?a=b",
+      endpointAttributes: "",
       dates: (function() {
         let data = [];
         let today = new Date();
@@ -34,11 +48,6 @@ export default {
         return data;
       })()
     };
-  },
-  mounted() {
-    axios
-      .get("http://localhost:8080/events")
-      .then(res => (this.schedules = res.data));
   }
 };
 </script>
