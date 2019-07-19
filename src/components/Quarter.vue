@@ -8,6 +8,7 @@
     v-bind:style="{
       backgroundColor: this.color
     }"
+    v-tooltip.bottom-start="'kekekek' + this.amount"
   >
     {{ this.formatTime() }}
   </div>
@@ -50,7 +51,7 @@ export default {
         this.time.getTime() >= event["startDate"].getTime() &&
         this.time.getTime() < event["endDate"].getTime()
       ) {
-        this.amount += 1;
+        this.amount += event["size"];
         this.newMax(this.amount);
       }
     }
@@ -76,10 +77,18 @@ export default {
   @extend .slot;
   height: 12.5px;
   color: transparent;
+  &:hover {
+    height: 10.5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.24);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+  }
 }
 
 .hour {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  &:hover {
+    height: 11.5px;
+  }
 }
 
 .time {
