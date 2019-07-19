@@ -75,6 +75,7 @@ export default {
 
 .quarter {
   @extend .slot;
+  transition: background-color 0.3s;
   height: 12.5px;
   color: transparent;
   &:hover {
