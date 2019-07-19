@@ -8,7 +8,7 @@
     v-bind:style="{
       backgroundColor: this.color
     }"
-    v-tooltip.bottom-start="'kekekek' + this.amount"
+    v-tooltip.bottom-start="'' + this.amount"
   >
     {{ this.formatTime() }}
   </div>
