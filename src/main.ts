@@ -1,8 +1,10 @@
 import Vue from "vue";
 import App from "./App.vue";
 import VTooltip from "v-tooltip";
+import VCalendar from "v-calendar";
 
 Vue.use(VTooltip);
+Vue.use(VCalendar);
 Vue.config.productionTip = false;
 Vue.prototype.$max = 0;
 Vue.prototype.setMax = function(newMax: number) {
