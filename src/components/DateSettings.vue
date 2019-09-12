@@ -2,8 +2,7 @@
   <div class="big-container">
     <Header title="Date Settings"></Header>
     <div class="schedule">
-      <v-date-picker v-model="date"></v-date-picker>
-
+      <v-date-picker v-model="date" is-inline></v-date-picker>
     </div>
   </div>
 </template>
@@ -15,7 +14,7 @@ import axios from "axios";
 export default {
   name: "FilterSettings",
   components: {
-    Header,
+    Header
   },
   props: {
     onNewStartDate: {
